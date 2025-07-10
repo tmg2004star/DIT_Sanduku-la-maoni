@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Karibu DITSO Sanduku La Maoni</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Basic body styling for full-page background and centering */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Open Sans', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            /* Attractive gradient background */
+            background: linear-gradient(to right top, #6a11cb, #2575fc); /* Purple to Blue gradient */
+            color: #ffffff; /* White text for contrast */
+            overflow: hidden; /* Prevent scrollbars if content overflows */
+            position: relative; /* Needed for pseudo-elements */
+        }
+
+        /* Optional: Particles/Bubbles effect for the background */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* Radial gradients for subtle, moving bubbles */
+            background: 
+                radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+            background-size: 800px 800px; /* Size of the gradient bubbles */
+            animation: moveBubbles 30s linear infinite alternate; /* Animation to move bubbles */
+        }
+
+        /* Keyframes for moving background bubbles */
+        @keyframes moveBubbles {
+            0% { background-position: 0 0, 800px 800px; }
+            100% { background-position: 800px 800px, 0 0; }
+        }
+
+        /* Container for all welcome page content */
+        .welcome-container {
+            text-align: center;
+            background-color: rgba(0, 0, 0, 0.4); /* Slightly transparent dark background */
+            padding: 50px 40px;
+            border-radius: 15px; /* Rounded corners */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); /* Stronger shadow for depth */
+            max-width: 600px; /* Maximum width for the container */
+            width: 90%; /* Responsive width */
+            animation: fadeInScale 1.5s ease-out; /* Animation for container to fade in and scale */
+            position: relative; /* Ensure it's above the background pseudo-element */
+            z-index: 10;
+        }
+
+        /* Keyframes for container fade-in and scale animation */
+        @keyframes fadeInScale {
+            0% { opacity: 0; transform: scale(0.9) translateY(20px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        /* Styling for "DITSO" text */
+        h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 4em; /* Large font size */
+            margin-bottom: 5px;
+            letter-spacing: 5px; /* Spacing between letters */
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.7); /* Glowing text effect */
+            animation: textFadeIn 2s ease-out; /* Fade-in animation for text */
+        }
+
+        /* Styling for "SANDUKU LA MAONI" text */
+        h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.2em; /* Smaller than h1 but still large */
+            margin-top: 0;
+            margin-bottom: 30px;
+            letter-spacing: 2px;
+            animation: textFadeIn 2.2s ease-out; /* Fade-in animation for text */
+        }
+
+        /* Keyframes for text fade-in animation */
+        @keyframes textFadeIn {
+            0% { opacity: 0; transform: translateY(-20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Styling for DIT logo image */
+        .logo-img {
+            max-width: 180px; /* Max width for responsiveness */
+            height: auto; /* Maintain aspect ratio */
+            margin-bottom: 40px;
+            animation: bounce 2s infinite ease-in-out; /* Bouncing animation */
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5)); /* Soft glow effect */
+        }
+
+        /* Keyframes for bouncing logo animation */
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-30px); } /* Bounce up */
+            60% { transform: translateY(-15px); } /* Slight bounce down */
+        }
+
+        /* Styling for "KARIBU" button */
+        .welcome-button {
+            background-color: #2ecc71; /* Vibrant green */
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 50px; /* Pill-shaped button */
+            font-size: 1.5em;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none; /* Remove underline for anchor tag */
+            display: inline-block; /* Allow padding and margin */
+            transition: all 0.3s ease; /* Smooth transitions for hover effects */
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Initial shadow */
+            animation: pulse 2s infinite; /* Pulsating animation */
+        }
+
+        /* Hover effect for the button */
+        .welcome-button:hover {
+            background-color: #27ae60; /* Darker green on hover */
+            transform: translateY(-3px) scale(1.02); /* Slight lift and scale */
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4); /* Larger shadow on hover */
+            animation: none; /* Stop pulsing on hover */
+        }
+
+        /* Keyframes for pulsating button animation */
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); }
+            50% { transform: scale(1.05); box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5); }
+            100% { transform: scale(1); box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); }
+        }
+
+        /* Styling for the TMG DIGTECH button (formerly .credit) */
+        .tmg-digtech-button {
+            display: inline-block; /* Make it behave like a block but inline */
+            margin-top: 40px; /* Space from KARIBU button */
+            padding: 10px 25px;
+            background-color: rgba(255, 255, 255, 0.15); /* Slightly transparent white */
+            border: 2px solid rgba(255, 255, 255, 0.5); /* White border */
+            border-radius: 30px; /* More rounded */
+            text-decoration: none;
+            color: #ffffff;
+            font-family: 'Open Sans', sans-serif;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            animation: pulseSmall 1.5s infinite ease-in-out; /* A subtle pulse */
+        }
+
+        .tmg-digtech-button:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+            animation: none; /* Stop pulse on hover */
+        }
+
+        .tmg-digtech-button span {
+            display: block;
+            font-size: 0.7em; /* Smaller for "from" */
+            margin-bottom: 3px;
+            opacity: 0.8;
+        }
+
+        .tmg-digtech-button strong {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.1em; /* Larger for "TMG DIGTECH" */
+            letter-spacing: 1px;
+        }
+
+        /* Keyframes for a subtle pulse animation */
+        @keyframes pulseSmall {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+        /* Responsive adjustments for smaller screens */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2.8em;
+                letter-spacing: 3px;
+            }
+            h2 {
+                font-size: 1.6em;
+                margin-bottom: 20px;
+            }
+            .logo-img {
+                max-width: 140px;
+                margin-bottom: 30px;
+            }
+            .welcome-button {
+                font-size: 1.2em;
+                padding: 12px 30px;
+            }
+            .tmg-digtech-button {
+                font-size: 0.9em;
+                padding: 8px 20px;
+            }
+            .tmg-digtech-button strong {
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="welcome-container">
+        <h1>DITSO</h1>
+        <h2>SANDUKU LA MAONI</h2>
+        
+        <img src="C:\Users\Lenovo\trust code\CODE\SANDUKU LA MAONI\DIT_LOGO-removebg-preview.png" alt="DIT Logo" class="logo-img"> 
+
+        <a href="C:\Users\Lenovo\trust code\CODE\SANDUKU LA MAONI\index.html" class="welcome-button">KARIBU</a>
+
+        <a href="tmg_digtech_info.html" class="tmg-digtech-button">
+            <span>from</span>
+            <strong>TMG DIGTECH</strong>
+        </a>
+    </div>
+</body>
+</html>

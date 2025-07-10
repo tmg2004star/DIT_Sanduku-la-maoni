@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chuo Huru: Kuingia kwa Wasimamizi</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            overflow: hidden; /* Zuia scrollbar isiyo ya lazima */
+            /* BACKGROUND MPYA ILIYOBORESHWA */
+            background: linear-gradient(to right top, #6a11cb, #2575fc); /* Purple to Blue gradient */
+            position: relative; /* Muhimu kwa ajili ya background bubbles */
+        }
+
+        /* Bubbles/Particles effect for the background */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+            background-size: 800px 800px;
+            animation: moveBubbles 30s linear infinite alternate;
+            z-index: -1; /* Hakikisha bubbles zipo nyuma ya content */
+        }
+
+        /* Keyframes for moving background bubbles */
+        @keyframes moveBubbles {
+            0% { background-position: 0 0, 800px 800px; }
+            100% { background-position: 800px 800px, 0 0; }
+        }
+
+        .login-container {
+            background-color: rgba(255, 255, 255, 0.9); /* Rangi nyeupe iliyofifia kidogo ili kuonekana vizuri juu ya background */
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            position: relative; /* Hakikisha inakaa juu ya background bubbles */
+            z-index: 1; 
+        }
+
+        h2 {
+            color: #2c3e50;
+            margin-bottom: 30px;
+            font-size: 2em;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #34495e;
+            font-weight: bold;
+            font-size: 0.95em;
+        }
+
+        input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 1em;
+            color: #333;
+            background-color: #ecf0f1;
+        }
+
+        input[type="password"]:focus {
+            border-color: #007bff;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+        }
+
+        button {
+            background-color: #007bff; /* Bluu */
+            color: white;
+            padding: 14px 25px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3; /* Bluu iliyokolea zaidi */
+        }
+
+        .error-message {
+            color: #e74c3c; /* Nyekundu */
+            margin-top: 15px;
+            font-size: 0.9em;
+            display: none; /* Imefichwa mwanzoni */
+        }
+
+        .back-link {
+            display: block;
+            margin-top: 20px;
+            font-size: 0.9em;
+            color: #6c757d;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .back-link:hover {
+            color: #495057;
+            text-decoration: underline;
+        }
+
+        /* Responsive design kwa simu */
+        @media (max-width: 600px) {
+            .login-container {
+                padding: 30px;
+            }
+            h2 {
+                font-size: 1.8em;
+            }
+            button {
+                padding: 12px 20px;
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2>Ingia Kama Msimamizi</h2>
+        <form id="adminLoginForm">
+            <div class="form-group">
+                <label for="password">Nenosiri:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+
+            <p class="error-message" id="loginErrorMessage">Nenosiri si sahihi.</p>
+
+            <button type="submit">Ingia</button>
+        </form>
+        <a href="index.html" class="back-link">Rudi Ukurasa Mkuu</a>
+    </div>
+
+    <script>
+        document.getElementById('adminLoginForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Zuia fomu kutuma data kwa njia ya kawaida
+
+            const password = document.getElementById('password').value;
+            const errorMessageDiv = document.getElementById('loginErrorMessage');
+
+            // Ficha ujumbe wa makosa kwanza
+            errorMessageDiv.style.display = 'none';
+
+            // Angalia nenosiri (kwa sasa ni dummy value)
+            const correctPassword = '1234';
+
+            if (password === correctPassword) {
+                // Kama ni sahihi, mpeleke kwenye dashibodi ya msimamizi
+                window.location.href = "admin_dashboard.html";
+            } else {
+                // Kama si sahihi, onyesha ujumbe wa makosa
+                errorMessageDiv.style.display = 'block';
+                alert("Nenosiri si sahihi. Tafadhali jaribu tena."); // Ujumbe wa ziada
+            }
+        });
+    </script>
+</body>
+</html>

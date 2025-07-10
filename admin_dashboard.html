@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chuo Huru: Dashibodi ya Msimamizi</title>
+    <!-- Supabase CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        /* Basic body styling with the new background */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            color: #333;
+            /* BACKGROUND MPYA ILIYOBORESHWA */
+            background: linear-gradient(to right top, #6a11cb, #2575fc); /* Purple to Blue gradient */
+            position: relative; /* Muhimu kwa ajili ya background bubbles */
+            /* overflow: hidden; /* Zuia scrollbar isiyo ya lazima - IMEONDOLEWA ILI KURUHUSU KUSHUKA CHINI */
+        }
+
+        /* Bubbles/Particles effect for the background */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+            background-size: 800px 800px;
+            animation: moveBubbles 30s linear infinite alternate;
+            z-index: -1; /* Hakikisha bubbles zipo nyuma ya content */
+        }
+
+        /* Keyframes for moving background bubbles */
+        @keyframes moveBubbles {
+            0% { background-position: 0 0, 800px 800px; }
+            100% { background-position: 800px 800px, 0 0; }
+        }
+
+        /* Header styling */
+        header {
+            background-color: rgba(44, 62, 80, 0.8); /* Slightly transparent dark blue */
+            color: white;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            position: relative; /* Ensure it's above background bubbles */
+            z-index: 1;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.8em;
+        }
+
+        .logout-button {
+            background-color: #e74c3c;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background-color 0.3s ease;
+        }
+
+        .logout-button:hover {
+            background-color: #c0392b;
+        }
+
+        /* Main content area styling */
+        main {
+            flex-grow: 1;
+            padding: 30px;
+            max-width: 1200px;
+            margin: 20px auto;
+            background-color: rgba(255, 255, 255, 0.9); /* Slightly transparent white for content area */
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            position: relative; /* Ensure it's above background bubbles */
+            z-index: 1;
+        }
+
+        /* Stats grid styling */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background-color: #ecf0f1;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-card h3 {
+            color: #34495e;
+            margin-top: 0;
+            font-size: 1.1em;
+        }
+
+        .stat-card p {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #2c3e50;
+            margin: 10px 0 0;
+        }
+
+        /* Filters and search styling */
+        .filters-search {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 30px;
+            align-items: center;
+        }
+
+        .filters-search label {
+            font-weight: bold;
+            color: #34495e;
+            margin-right: 5px;
+        }
+
+        .filters-search select,
+        .filters-search input[type="text"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 0.95em;
+            background-color: #ecf0f1;
+            flex: 1;
+            min-width: 150px;
+        }
+
+        /* Feedback list styling */
+        .feedback-list {
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+
+        .feedback-item {
+            background-color: #fdfdfd;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            transition: transform 0.2s ease;
+        }
+
+        .feedback-item:hover {
+            transform: translateY(-3px);
+        }
+
+        .feedback-item h4 {
+            color: #2c3e50;
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 1.3em;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .feedback-item p {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .feedback-meta {
+            font-size: 0.85em;
+            color: #777;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+            border-top: 1px dashed #eee;
+            padding-top: 10px;
+            margin-top: 10px;
+        }
+
+        /* Status badges styling */
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-weight: bold;
+            color: white;
+            font-size: 0.8em;
+        }
+
+        .status-new { background-color: #3498db; } /* Blue */
+        .status-in-progress { background-color: #f39c12; } /* Orange */
+        .status-resolved { background-color: #27ae60; } /* Green */
+        .status-viewed { background-color: #8c7ae6; } /* Purple for viewed */
+
+        /* Priority styling */
+        .priority-high { color: #e74c3c; font-weight: bold; } /* Red */
+        .priority-medium { color: #f39c12; font-weight: bold; } /* Orange */
+        .priority-low { color: #27ae60; font-weight: bold; } /* Green */
+
+        /* Feedback actions buttons styling */
+        .feedback-actions {
+            margin-top: 15px;
+            text-align: right;
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            flex-wrap: wrap; /* Allow buttons to wrap on smaller screens */
+        }
+
+        .action-button {
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.85em;
+            transition: background-color 0.3s ease, opacity 0.3s ease;
+        }
+
+        .action-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .resolve-button {
+            background-color: #007bff; /* Blue */
+        }
+
+        .resolve-button:hover:not(:disabled) {
+            background-color: #0056b3;
+        }
+
+        .resolve-button[data-current-status="resolved"] {
+            background-color: #6c757d; /* Grey for "Fungua Tena" */
+        }
+        .resolve-button[data-current-status="resolved"]:hover:not(:disabled) {
+            background-color: #5a6268;
+        }
+
+        .check-button {
+            background-color: #1abc9c; /* Sea green */
+        }
+        .check-button:hover:not(:disabled) {
+            background-color: #16a085;
+        }
+
+        .check-button[data-checked="true"] {
+            background-color: #2ecc71; /* Brighter green after checked */
+            cursor: not-allowed;
+        }
+        .check-button[data-checked="true"]:hover {
+            background-color: #2ecc71;
+        }
+
+        .in-progress-button {
+            background-color: #f39c12; /* Orange */
+        }
+        .in-progress-button:hover:not(:disabled) {
+            background-color: #e67e22;
+        }
+
+        /* Gemini AI button styling */
+        .gemini-button {
+            background-color: #6200EE; /* Deep Purple */
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.85em;
+            transition: background-color 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .gemini-button:hover:not(:disabled) {
+            background-color: #3700B3; /* Darker purple */
+        }
+
+        .gemini-button .spinner {
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid #fff;
+            border-radius: 50%;
+            width: 12px;
+            height: 12px;
+            animation: spin 1s linear infinite;
+            display: none; /* Hidden by default */
+        }
+
+        .gemini-button.loading .spinner {
+            display: inline-block; /* Show when loading */
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .summary-output {
+            background-color: #f0f8ff; /* Light blue background */
+            border-left: 4px solid #007bff;
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: 5px;
+            font-size: 0.9em;
+            color: #333;
+            text-align: left;
+            display: none; /* Hidden by default */
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .summary-output.show {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Footer styling */
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+            color: #777;
+            font-size: 0.9em;
+            border-top: 1px solid #eee;
+            position: relative; /* Ensure it's above background bubbles */
+            z-index: 1;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            .filters-search {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .filters-search select,
+            .filters-search input[type="text"] {
+                width: 100%;
+            }
+            .feedback-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .action-button, .gemini-button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Dashibodi ya Maoni ya Wanafunzi</h1>
+        <button class="logout-button">Ondoka</button>
+    </header>
+
+    <main>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Jumla ya Maoni</h3>
+                <p id="totalFeedback">0</p>
+            </div>
+            <div class="stat-card">
+                <h3>Maoni Mapya</h3>
+                <p id="newFeedback">0</p>
+            </div>
+            <div class="stat-card">
+                <h3>Maoni Yaliyosuluhishwa</h3>
+                <p id="resolvedFeedback">0</p>
+            </div>
+        </div>
+
+        <div class="filters-search">
+            <div>
+                <label for="filterStatus">Hali:</label>
+                <select id="filterStatus">
+                    <option value="all">Zote</option>
+                    <option value="new">Mpya</option>
+                    <option value="in-progress">Inaendelea</option>
+                    <option value="resolved">Imesuluhishwa</option>
+                    <option value="viewed">Imetazamwa</option>
+                </select>
+            </div>
+            <div>
+                <label for="filterType">Aina:</label>
+                <select id="filterType">
+                    <option value="all">Zote</option>
+                    <option value="pendekezo">Pendekezo</option>
+                    <option value="malalamiko">Malalamiko</option>
+                    <option value="pongezi">Pongezi</option>
+                    <option value="swali">Swali</option>
+                    <option value="nyingine">Nyingine</option>
+                </select>
+            </div>
+            <div>
+                <label for="filterAnonymous">Bila Jina:</label>
+                <select id="filterAnonymous">
+                    <option value="all">Zote</option>
+                    <option value="yes">Ndiyo</option>
+                    <option value="no">Hapana</option>
+                </select>
+            </div>
+            <input type="text" id="search" placeholder="Tafuta maoni...">
+        </div>
+
+        <div class="feedback-list" id="feedbackList">
+            <p style="text-align: center; color: #6c757d; margin-top: 50px;">Inapakia maoni...</p>
+        </div>
+    </main>
+
+    <footer>
+        &copy; 2025 Chuo Huru. Haki zote zimehifadhiwa.
+    </footer>
+
+    <script>
+        // Supabase client setup
+        // Hizi ndizo funguo zako za Supabase. HAKIKISHA unazibadilisha na zile HALISI kutoka mradi wako wa Supabase.
+        // Unaweza kuzipata kwenye dashibodi yako ya Supabase chini ya Project Settings -> API.
+        const SUPABASE_URL = 'https://ykklasdqoulltvzihklt.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inlra2xhc2Rxb3VsbHR2emloa2x0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTIxMTE5NTcsImV4cCI6MjA2NzY4Nzk1N30.aVw_hXPc36zVFC2VFKSg8lO3_NKlAuk6ywtviEpECWU   '; 
+        // <--- BADILISHA HAPA
+
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // Function to get status badge class for styling
+        function getStatusBadgeClass(status) {
+            switch (status) {
+                case 'new': return 'status-new';
+                case 'in-progress': return 'status-in-progress';
+                case 'resolved': return 'status-resolved';
+                case 'viewed': return 'status-viewed';
+                default: return '';
+            }
+        }
+
+        // Function to get priority class for styling
+        function getPriorityClass(priority) {
+            switch (priority) {
+                case 'high': return 'priority-high';
+                case 'medium': return 'priority-medium';
+                case 'low': return 'priority-low';
+                default: return '';
+            }
+        }
+
+        // Function to update feedback status in Supabase
+        async function updateFeedbackStatus(id, newStatus) {
+            const { data, error } = await supabase
+                .from('feedback')
+                .update({ status: newStatus })
+                .eq('id', id);
+
+            if (error) {
+                console.error('Error updating feedback status:', error);
+                alert('Failed to update status. Please try again. (Error: ' + error.message + ')');
+            } else {
+                console.log('Feedback status updated:', data);
+                await fetchAndRenderFeedback(); // Reload feedback after update
+            }
+        }
+
+        // Function to mark feedback as checked/viewed
+        async function markFeedbackAsChecked(id) {
+            const { data, error } = await supabase
+                .from('feedback')
+                .update({ viewed_at: new Date().toISOString(), status: 'viewed' })
+                .eq('id', id)
+                .is('viewed_at', null); // Only update if not already viewed
+
+            if (error) {
+                console.error('Error marking feedback as checked:', error);
+                alert('Failed to mark feedback as checked. Please try again. (Error: ' + error.message + ')');
+            } else {
+                console.log('Feedback marked as checked:', data);
+                await fetchAndRenderFeedback(); // Reload feedback after update
+            }
+        }
+
+        // Function to call Gemini API for summarization
+        async function summarizeFeedback(feedbackText, buttonElement) {
+            buttonElement.classList.add('loading'); // Show loading spinner
+            buttonElement.disabled = true; // Disable button during loading
+            const originalButtonText = buttonElement.innerHTML;
+            buttonElement.innerHTML = '<span class="spinner"></span> Inafupisha...';
+
+            const summaryOutputDiv = buttonElement.closest('.feedback-item').querySelector('.summary-output');
+            summaryOutputDiv.classList.remove('show'); // Hide previous summary if any
+            summaryOutputDiv.innerText = ''; // Clear previous summary
+
+            try {
+                let chatHistory = [];
+                chatHistory.push({ role: "user", parts: [{ text: `Fupisha maoni haya ya mwanafunzi kwa kifupi, usizidi sentensi 3: "${feedbackText}"` }] });
+                const payload = { contents: chatHistory };
+                const apiKey = ""; // Canvas will provide this API key at runtime
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+                
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    const summary = result.candidates[0].content.parts[0].text;
+                    summaryOutputDiv.innerText = summary;
+                    summaryOutputDiv.classList.add('show');
+                } else {
+                    summaryOutputDiv.innerText = 'Imeshindwa kufupisha maoni. Jaribu tena.';
+                    summaryOutputDiv.classList.add('show');
+                    console.error('Gemini API response structure unexpected:', result);
+                }
+            } catch (error) {
+                console.error('Error calling Gemini API:', error);
+                summaryOutputDiv.innerText = 'Hitilafu ya mtandao au API. Tafadhali jaribu tena.';
+                summaryOutputDiv.classList.add('show');
+            } finally {
+                buttonElement.classList.remove('loading');
+                buttonElement.disabled = false;
+                buttonElement.innerHTML = originalButtonText; // Restore original button text
+            }
+        }
+
+
+        // Function to render feedback items to the list
+        async function renderFeedback(feedbackToDisplay) {
+            const feedbackListDiv = document.getElementById('feedbackList');
+            feedbackListDiv.innerHTML = ''; // Clear existing list
+
+            if (!feedbackToDisplay || feedbackToDisplay.length === 0) {
+                feedbackListDiv.innerHTML = '<p style="text-align: center; color: #6c757d; margin-top: 50px;">Hakuna maoni yanayolingana na vigezo vilivyochaguliwa.</p>';
+                return;
+            }
+
+            feedbackToDisplay.forEach(item => {
+                const feedbackItemDiv = document.createElement('div');
+                feedbackItemDiv.classList.add('feedback-item');
+
+                const reportedByText = item.is_anonymous ? 'Mwanafunzi (Bila Jina)' : (item.student_name || 'Hajatajwa');
+                
+                const isChecked = item.viewed_at !== null;
+                const checkButtonText = isChecked ? 'Imetazamwa' : 'Weka Imetazamwa';
+                const checkButtonDisabled = isChecked ? 'disabled' : '';
+
+                feedbackItemDiv.innerHTML = `
+                    <h4>
+                        ${item.type.charAt(0).toUpperCase() + item.type.slice(1)} - 
+                        <span class="${getStatusBadgeClass(item.status)}">${item.status.toUpperCase()}</span> -
+                        <span class="${getPriorityClass(item.priority)}">Kipaumbele: ${item.priority.toUpperCase()}</span>
+                    </h4>
+                    <p>${item.message}</p>
+                    <div class="feedback-meta">
+                        <span>Na: ${reportedByText}</span>
+                        <span>Tarehe: ${new Date(item.created_at).toLocaleString()}</span>
+                        ${item.viewed_at ? `<span>Imetazamwa: ${new Date(item.viewed_at).toLocaleString()}</span>` : '<span>Haijatazamwa</span>'}
+                    </div>
+                    <div class="feedback-actions">
+                        <button class="action-button check-button" data-id="${item.id}" data-checked="${isChecked}" ${checkButtonDisabled}>
+                            ${checkButtonText}
+                        </button>
+                        <button class="action-button resolve-button" data-id="${item.id}" data-current-status="${item.status}">
+                            ${item.status === 'resolved' ? 'Fungua Tena' : 'Suluhisha'}
+                        </button>
+                        ${item.status !== 'new' && item.status !== 'resolved' ? 
+                            `<button class="action-button in-progress-button" data-id="${item.id}" data-current-status="${item.status}">
+                                ${item.status === 'in-progress' ? 'Weka Mpya' : 'Weka Inaendelea'}
+                            </button>`
+                        : ''}
+                        <button class="action-button gemini-button" data-id="${item.id}" data-feedback-text="${item.message}">
+                            ✨ Fupisha Maoni
+                            <span class="spinner"></span>
+                        </button>
+                    </div>
+                    <div class="summary-output"></div> <!-- Area to display summary -->
+                `;
+                feedbackListDiv.appendChild(feedbackItemDiv);
+            });
+
+            // Attach event listeners for all buttons
+            document.querySelectorAll('.resolve-button').forEach(button => {
+                button.addEventListener('click', async (event) => {
+                    const feedbackId = event.target.dataset.id;
+                    const currentStatus = event.target.dataset.currentStatus;
+                    const newStatus = currentStatus === 'resolved' ? 'new' : 'resolved';
+                    await updateFeedbackStatus(feedbackId, newStatus);
+                });
+            });
+
+            document.querySelectorAll('.in-progress-button').forEach(button => {
+                button.addEventListener('click', async (event) => {
+                    const feedbackId = event.target.dataset.id;
+                    const currentStatus = event.target.dataset.currentStatus;
+                    const newStatus = currentStatus === 'in-progress' ? 'new' : 'in-progress';
+                    await updateFeedbackStatus(feedbackId, newStatus);
+                });
+            });
+
+            document.querySelectorAll('.check-button').forEach(button => {
+                button.addEventListener('click', async (event) => {
+                    const feedbackId = event.target.dataset.id;
+                    await markFeedbackAsChecked(feedbackId);
+                });
+            });
+
+            document.querySelectorAll('.gemini-button').forEach(button => {
+                button.addEventListener('click', async (event) => {
+                    const feedbackText = event.target.dataset.feedbackText;
+                    await summarizeFeedback(feedbackText, event.target);
+                });
+            });
+        }
+
+        // Function to fetch and render feedback from Supabase
+        async function fetchAndRenderFeedback() {
+            const statusFilter = document.getElementById('filterStatus').value;
+            const typeFilter = document.getElementById('filterType').value;
+            const anonymousFilter = document.getElementById('filterAnonymous').value;
+            const searchTerm = document.getElementById('search').value.toLowerCase();
+
+            let query = supabase.from('feedback').select('*');
+
+            // Apply filters based on user selection
+            if (statusFilter !== 'all') {
+                query = query.eq('status', statusFilter);
+            }
+            if (typeFilter !== 'all') {
+                query = query.eq('type', typeFilter);
+            }
+            if (anonymousFilter === 'yes') {
+                query = query.eq('is_anonymous', true);
+            } else if (anonymousFilter === 'no') {
+                query = query.eq('is_anonymous', false);
+            }
+
+            // Ordering logic: 'new' first, then unviewed, then by creation date
+            query = query.order('status', { ascending: true, nullsFirst: false });
+            query = query.order('viewed_at', { ascending: true, nullsFirst: true });
+            query = query.order('created_at', { ascending: false }); 
+
+            const { data, error } = await query;
+
+            if (error) {
+                console.error('Error fetching feedback:', error);
+                alert('Failed to load feedback. Please try again. (Error: ' + error.message + ')');
+                return;
+            }
+
+            // Client-side search filtering
+            let filteredAndSearchedFeedback = data.filter(item => {
+                const itemText = item.message.toLowerCase();
+                const itemType = item.type.toLowerCase();
+                const itemName = item.student_name ? item.student_name.toLowerCase() : '';
+                return itemText.includes(searchTerm) || itemType.includes(searchTerm) || itemName.includes(searchTerm);
+            });
+
+            renderFeedback(filteredAndSearchedFeedback);
+            updateStats(data); // Update stats with all fetched data
+        }
+
+        // Function to update statistics displayed on the dashboard
+        function updateStats(allFeedback) {
+            document.getElementById('totalFeedback').innerText = allFeedback.length;
+            document.getElementById('newFeedback').innerText = allFeedback.filter(item => item.status === 'new').length;
+            document.getElementById('resolvedFeedback').innerText = allFeedback.filter(item => item.status === 'resolved').length;
+        }
+
+        // Event listeners for filters and search
+        document.getElementById('filterStatus').addEventListener('change', fetchAndRenderFeedback);
+        document.getElementById('filterType').addEventListener('change', fetchAndRenderFeedback);
+        document.getElementById('filterAnonymous').addEventListener('change', fetchAndRenderFeedback);
+        document.getElementById('search').addEventListener('keyup', fetchAndRenderFeedback);
+
+        // Load feedback when the page loads
+        document.addEventListener('DOMContentLoaded', fetchAndRenderFeedback);
+
+        // Logout button functionality
+        document.querySelector('.logout-button').addEventListener('click', function(e) {
+            e.preventDefault();
+            window.location.href = "admin_login.html";
+        });
+    </script>
+</body>
+</html>

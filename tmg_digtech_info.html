@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuhusu TMG DigTech</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Open Sans', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            /* Consistent background with welcome page */
+            background: linear-gradient(to right top, #6a11cb, #2575fc); /* Purple to Blue gradient */
+            color: #ffffff;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Background particles/bubbles */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+            background-size: 800px 800px;
+            animation: moveBubbles 30s linear infinite alternate;
+        }
+
+        @keyframes moveBubbles {
+            0% { background-position: 0 0, 800px 800px; }
+            100% { background-position: 800px 800px, 0 0; }
+        }
+
+        .info-container {
+            text-align: center;
+            background-color: rgba(0, 0, 0, 0.5); /* Darker transparent background */
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+            max-width: 700px;
+            width: 90%;
+            animation: fadeInSlideUp 1.2s ease-out; /* Fade in and slide up animation */
+            position: relative;
+            z-index: 10;
+        }
+
+        @keyframes fadeInSlideUp {
+            0% { opacity: 0; transform: translateY(50px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.8em;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            animation: textBounce 1.5s ease-out; /* Bouncing text animation */
+        }
+
+        @keyframes textBounce {
+            0%, 100% { transform: translateY(0); }
+            20% { transform: translateY(-10px); }
+            40% { transform: translateY(-5px); }
+        }
+
+        p {
+            font-size: 1.1em;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            color: #e0e0e0; /* Slightly off-white for readability */
+            animation: fadeIn 2s ease-out;
+        }
+
+        .contact-info {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+            animation: fadeIn 2.5s ease-out;
+        }
+
+        .contact-info p {
+            margin: 10px 0;
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #ffffff;
+        }
+
+        .contact-info a {
+            color: #2ecc71; /* Green for links */
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .contact-info a:hover {
+            color: #27ae60;
+            text-decoration: underline;
+        }
+
+        .back-button {
+            background-color: #e74c3c; /* Red for back button */
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 40px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .back-button:hover {
+            background-color: #c0392b;
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            .info-container {
+                padding: 30px;
+            }
+            h1 {
+                font-size: 2em;
+            }
+            p {
+                font-size: 1em;
+            }
+            .contact-info p {
+                font-size: 1em;
+            }
+            .back-button {
+                font-size: 1em;
+                padding: 10px 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="info-container">
+        <h1>Kuhusu TMG DigTech</h1>
+        <p>Sanduku la Maoni la Chuo cha DIT limetengenezwa na TMG DigTech, kampuni ya ubunifu wa kidigitali inayolenga kutatua changamoto za wanafunzi na taasisi kwa kutumia teknolojia rahisi na bora.</p>
+        <p>Msimamizi na mtengenezaji wa tovuti hii ni <strong>Trust Erastus</strong>, mwanzilishi wa TMG DigTech na mwanafunzi wa Chuo cha DIT, Campus ya Mwanza.</p>
+        <p>Tunajivunia kutoa suluhisho hili ili wanafunzi, walimu na uongozi wawe na nafasi rahisi na ya siri ya kutoa maoni, mapendekezo na hoja zenye kujenga chuo chetu.</p>
+
+        <div class="contact-info">
+            <p><strong>Contact:</strong></p>
+            <p>📧 <a href="mailto:trusterastus@gmail.com">trusterastus@gmail.com</a></p>
+            <p>📱 <a href="tel:+255786701705">+255 786 701 705</a></p>
+            <p>🌐 TMG DigTech - Ndoto Zako, Ubunifu Wetu</p>
+        </div>
+
+        <a href="welcome_page.html" class="back-button">Rudi Nyuma</a>
+    </div>
+</body>
+</html>
